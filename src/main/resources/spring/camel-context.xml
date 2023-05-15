@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring       https://camel.apache.org/schema/spring/camel-spring-2.23.3.xsd">
+    <bean id="salesForceAccountProcessor" class="com.redhat.SalesForceAccountProcessor"/>
+    <bean id="salesforce"
+		class="org.apache.camel.component.salesforce.SalesforceComponent">
+		<property name="loginConfig">
+			<bean class="org.apache.camel.component.salesforce.SalesforceLoginConfig">
+				<property name="clientId" value="${salesforce.clientId}" />
+				<property name="clientSecret" value="${salesforce.clientSecret}" />
+				<property name="refreshToken" value="${salesforce.refreshToken}" />
+				<property name="type" value="${salesforce.type}" />
+			</bean>
+		</property>
+	</bean>
+
+    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+        <route id="simple-route">
+            <from uri="mqtt:fool?host=tcp://broker.emqx.io:1883&amp;subscribeTopicName=camel/mqtt/sentiment"/>
+            <unmarshal>
+                <json library="Gson" unmarshalTypeName="com.redhat.Tweet"/>
+            </unmarshal>
+            <log message="${body.userName}"/>
+            <process ref="salesForceAccountProcessor"/>
+            <to id="mqtt-send" uri="salesforce:createSObject?sObjectName=Account"/>
+        </route>
+    </camelContext>
+</beans>
