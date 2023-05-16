@@ -117,6 +117,7 @@
       <artifactId>camel-jsonpath</artifactId>
       <version>${camel.version}</version>
     </dependency>
+<!--
     <dependency>
       <groupId>io.fabric8</groupId>
       <artifactId>openshift-client</artifactId>
@@ -143,6 +144,8 @@
       <artifactId>arquillian-junit-standalone</artifactId>
       <scope>test</scope>
     </dependency>
+-->
+
   </dependencies>
   <build>
     <pluginManagement>
