@@ -3,21 +3,21 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.redhat</groupId>
   <artifactId>salesforcetest</artifactId>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
   <name>SalesForceTest</name>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <fuse.bom.version>7.11.1.fuse-sb2-7_11_1-00017-redhat-00002</fuse.bom.version>
     <camel.version>2.23.2.fuse-7_11_1-00015-redhat-00002</camel.version>
-    <docker.image.version>registry.redhat.io/fuse7/fuse-java-openshift-rhel8:1.11</docker.image.version>
+    <docker.image.version>1.9</docker.image.version>
     <!--
             https://issues.redhat.com/browse/ENTESB-19256
             https://github.com/kubernetes-client/java/issues/1580
             https://github.com/kubernetes-client/java/issues/1606
             https://github.com/kubernetes-client/java/pull/1628
-        -->
     <io.kubernetes.client.version>14.0.1</io.kubernetes.client.version>
+    -->
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -233,7 +233,7 @@
     <profile>
       <id>openshift</id>
       <properties>
-        <jkube.generator.from>${docker.image.version}</jkube.generator.from>
+        <jkube.generator.from>registry.redhat.io/fuse7/fuse-java-openshift-rhel8:${docker.image.version}</jkube.generator.from>
       </properties>
       <activation />
       <build>
@@ -294,14 +294,19 @@
 						    <include>Account</include>
 						    <include>Contacts</include>
 					    </includes>
-              <!--
-					    <httpProxyHost>${camelSalesforce.httpProxyHost}</httpProxyHost>
-					    <httpProxyPort>${camelSalesforce.httpProxyPort}</httpProxyPort>
-              -->
 				    </configuration>
 			    </plugin>
         </plugins>
       </build>
+    </profile>
+        <profile>
+      <id>java11</id>
+      <activation>
+        <jdk>[11,)</jdk>
+      </activation>
+      <properties>
+        <jkube.generator.from>registry.redhat.io/fuse7/fuse-java-openshift-jdk11-rhel8:${docker.image.version}</jkube.generator.from>
+      </properties>
     </profile>
   </profiles>
 </project>
