@@ -1,6 +1,6 @@
 package com.redhat;
 
-import org.apache.commons.lang3.ObjectUtils.Null;
+//import org.apache.commons.lang3.ObjectUtils.Null;
 
 public class Tweet {
 
